@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "ridablepearl",
+  "version": "1.0.0-1.16",
+  "name": "Ridable Enderpearls",
+  "description": "Ride EnderPearls",
+  "authors": [
+    "kyrptonaught"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/ridable-ender-pearls",
+    "sources": "https://github.com/kyrptonaught/ridablepearls"
+  },
+  "license": "MIT",
+  "icon": "assets/ridablepearl/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.kyrptonaught.ridablepearl.RidablepearlMod"
+    ],
+    "client": [
+      "net.kyrptonaught.ridablepearl.client.RidablepearlModClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.4.0",
+    "fabric": "*"
+  }
+}
