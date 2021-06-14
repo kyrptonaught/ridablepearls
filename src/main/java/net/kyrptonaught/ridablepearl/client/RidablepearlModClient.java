@@ -7,7 +7,10 @@ import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.kyrptonaught.ridablepearl.entity.EntitySpawnPacket;
 import net.kyrptonaught.ridablepearl.RidablepearlMod;
+import net.kyrptonaught.ridablepearl.entity.RidablePearlEntity;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.entity.EntityRenderer;
+import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.FlyingItemEntityRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -21,8 +24,7 @@ public class RidablepearlModClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        EntityRendererRegistry.INSTANCE.register(RidablepearlMod.ridablepearl, (dispatcher, context) ->
-                new FlyingItemEntityRenderer(dispatcher, context.getItemRenderer()));
+        EntityRendererRegistry.INSTANCE.register(RidablepearlMod.ridablepearl, FlyingItemEntityRenderer::new);
        recieveEntityPacket();
     }
 
@@ -42,9 +44,9 @@ public class RidablepearlModClient implements ClientModInitializer {
                     throw new IllegalStateException("Failed to create instance of entity \"" + Registry.ENTITY_TYPE.getId(et) + "\"!");
                 e.updateTrackedPosition(pos);
                 e.setPos(pos.x, pos.y, pos.z);
-                e.pitch = pitch;
-                e.yaw = yaw;
-                e.setEntityId(entityId);
+                e.setPitch(pitch);
+                e.setYaw(yaw);
+                e.setId(entityId);
                 e.setUuid(uuid);
                 MinecraftClient.getInstance().world.addEntity(entityId, e);
             });

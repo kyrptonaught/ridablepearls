@@ -15,6 +15,8 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
+import java.util.Random;
+
 public class RidablePearlItem extends EnderPearlItem {
     public RidablePearlItem(Settings settings) {
         super(settings);
@@ -23,23 +25,23 @@ public class RidablePearlItem extends EnderPearlItem {
 
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack itemStack = user.getStackInHand(hand);
-        world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ENTITY_ENDER_PEARL_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (RANDOM.nextFloat() * 0.4F + 0.8F));
+        world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ENTITY_ENDER_PEARL_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (world.getRandom().nextFloat() * 0.4F + 0.8F));
         user.getItemCooldownManager().set(this, 20);
         if (!world.isClient) {
             RidablePearlEntity ridablePearlEntity = new RidablePearlEntity(world, user);
             ridablePearlEntity.setItem(itemStack);
-            ridablePearlEntity.setProperties(user, user.pitch, user.yaw, 0.0F, 1.5F, 1.0F);
+            ridablePearlEntity.setProperties(user, user.getPitch(), user.getYaw(), 0.0F, 1.5F, 1.0F);
             Entity primary = user.getRootVehicle();
             if (primary instanceof RidablePearlEntity) {
                 primary.getPassengerList().get(0).stopRiding();
-                primary.remove();
+                primary.discard();
             }
             user.getRootVehicle().startRiding(ridablePearlEntity, true);
             world.spawnEntity(ridablePearlEntity);
         }
 
         user.incrementStat(Stats.USED.getOrCreateStat(this));
-        if (!user.abilities.creativeMode) {
+        if (!user.getAbilities().creativeMode) {
             itemStack.damage(1, user, playerEntity -> playerEntity.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND));
         }
 
